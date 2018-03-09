@@ -19,7 +19,6 @@ before_install:
   - which python
   - brew uninstall --ignore-dependencies python
   - brew install python --universal --framework
-  - brew install wget
   - which python
   - export VERSIONER_PYTHON_PREFER_32_BIT=yes
   - defaults write com.apple.versioner.python Prefer-32-Bit -bool yes
