@@ -9,16 +9,11 @@ matrix:
     language: generic
     env: PYTHON=2.7
 
-# Cache pip packages. `cache: pip` does not work with custom install steps.
-cache:
-  directories:
-    - $HOME/Library/Caches/pip
-    - $HOME/.pip-accel
-
 before_install:
   - which python
   - brew uninstall --ignore-dependencies python
   - brew install python@2 --universal --framework
+  - export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
   - which python
   - export VERSIONER_PYTHON_PREFER_32_BIT=yes
   - defaults write com.apple.versioner.python Prefer-32-Bit -bool yes
