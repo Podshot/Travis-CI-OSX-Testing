@@ -54,12 +54,14 @@ script:
   #- if [ "${TRAVIS_TAG}x" = "x" ]; then return 0; fi
   #- export MCEDIT_BUILD_VERSION=${TRAVIS_TAG}
   - pyinstaller main-osx.spec
+  - zip -r "Test_${TRAVIS_BUILD_NUMBER}.zip" "dist" -x "*.DS_Store"
+
 
 # Deploy to GitHub Releases
 deploy:
   provider: releases
   api_key: $GITHUB_AUTH_TOKEN
-  file: dist/*.*
+  file: Test_$TRAVIS_BUILD_NUMBER.zip
   name: "Build #$TRAVIS_BUILD_NUMBER"
   file_glob: true
   skip_cleanup: true
