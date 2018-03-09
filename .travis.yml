@@ -1,0 +1,84 @@
+os: linux
+language: python
+python:
+  - 2.7.14
+
+matrix:
+  include:
+  - os: osx
+    language: generic
+    env: PYTHON=2.7.14
+
+# Cache pip packages. `cache: pip` does not work with custom install steps.
+cache:
+  directories:
+    - $HOME/Library/Caches/pip
+    - $HOME/.pip-accel
+
+before_install: |
+  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    brew update
+    # Per the `pyenv homebrew recommendations <https://github.com/yyuu/pyenv/wiki#suggested-build-environment>`_.
+    brew install openssl readline
+    # See https://docs.travis-ci.com/user/osx-ci-environment/#A-note-on-upgrading-packages.
+    # I didn't do this above because it works and I'm lazy.
+    brew outdated pyenv || brew upgrade pyenv
+    # virtualenv doesn't work without pyenv knowledge. venv in Python 3.3
+    # doesn't provide Pip by default. So, use `pyenv-virtualenv <https://github.com/yyuu/pyenv-virtualenv/blob/master/README.md>`_.
+    brew install pyenv-virtualenv
+    pyenv install $PYTHON
+    # I would expect something like ``pyenv init; pyenv local $PYTHON`` or
+    # ``pyenv shell $PYTHON`` would work, but ``pyenv init`` doesn't seem to
+    # modify the Bash environment. ??? So, I hand-set the variables instead.
+    export PYENV_VERSION=$PYTHON
+    export PATH="/Users/travis/.pyenv/shims:${PATH}"
+    pyenv-virtualenv venv
+    source venv/bin/activate
+    # A manual check that the correct version of Python is running.
+    python --version
+  fi
+
+install:
+  # Install wheel, upgrade pip to use wheel-cache
+  - python -m pip install -U pip
+  - python -m easy_install -U setuptools
+
+  # Download-progress bars break Travis's log view. Disable them by piping output
+  # through another program (if output is not a tty, no progress bars)
+  # Install dependencies.
+  - pip install -r requirements.txt | cat
+
+  # Install dependencies for tests.
+#  - pip install -r tests/requirements.txt | cat
+
+  - pip install git+http://github.com/pyinstaller/pyinstaller
+
+  # Install qt4 from third-party source
+  # https://github.com/cartr/homebrew-qt4
+#  - brew tap cartr/qt4
+#  - brew tap-pin cartr/qt4
+#  - brew install cartr/qt4/qt
+#  - brew install pyside@1.2 pyside-tools@1.2
+
+  # where are libs?
+#  - python -c 'from PySide.QtCore import QCoreApplication;app = QCoreApplication([]);print([str(p) for p in app.libraryPaths()])'
+
+  # - brew install pyside pyside-tools
+
+  # Install mcedit.
+  #- python setup.py develop
+
+script:
+  #- if [ "${TRAVIS_TAG}x" = "x" ]; then return 0; fi
+  #- export MCEDIT_BUILD_VERSION=${TRAVIS_TAG}
+  - pyinstaller main-osx.spec
+
+# Deploy to GitHub Releases
+deploy:
+  provider: releases
+  api_key: $GITHUB_AUTH_TOKEN
+  file: dist/*.*
+  file_glob: true
+  skip_cleanup: true
+  on:
+    tags: true
