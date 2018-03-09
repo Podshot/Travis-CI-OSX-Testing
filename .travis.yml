@@ -28,12 +28,12 @@ install:
   # Download-progress bars break Travis's log view. Disable them by piping output
   # through another program (if output is not a tty, no progress bars)
   # Install dependencies.
-  - arch -i386 pip install -r requirements.txt | cat
+  - pip install -r requirements.txt | cat
 
   # Install dependencies for tests.
 #  - pip install -r tests/requirements.txt | cat
 
-  - arch -i386 pip install git+http://github.com/pyinstaller/pyinstaller
+  - pip install git+http://github.com/pyinstaller/pyinstaller
 
   # Install qt4 from third-party source
   # https://github.com/cartr/homebrew-qt4
@@ -53,7 +53,7 @@ install:
 script:
   #- if [ "${TRAVIS_TAG}x" = "x" ]; then return 0; fi
   #- export MCEDIT_BUILD_VERSION=${TRAVIS_TAG}
-  - arch -i386 pyinstaller main-osx.spec
+  - pyinstaller main-osx.spec
 
 # Deploy to GitHub Releases
 deploy:
