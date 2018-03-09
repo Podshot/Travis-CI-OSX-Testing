@@ -17,7 +17,7 @@ cache:
 
 before_install:
   - which python
-  - brew uninstall python
+  - brew uninstall --ignore-dependencies python
   - brew install python --universal --framework
   - brew install wget
   - which python
