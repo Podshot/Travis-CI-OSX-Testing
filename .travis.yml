@@ -9,6 +9,7 @@ matrix:
     language: generic
     env: PYTHON=2.7
     osx_image: xcode8
+    rvm: 2.3
 
 before_install:
   - which python
