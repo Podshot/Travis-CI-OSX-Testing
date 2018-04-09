@@ -14,19 +14,13 @@ matrix:
 before_install:
   - brew upgrade ruby
   - which python
-  - brew uninstall --ignore-dependencies python
-  - brew install python@2 --universal --framework
-  - export PATH="/usr/local/opt/python@2/libexec/bin:$PATH"
-  - which python
-  - export VERSIONER_PYTHON_PREFER_32_BIT=yes
-  - defaults write com.apple.versioner.python Prefer-32-Bit -bool yes
-  - which python
   - python --version
 
 install:
   # Install wheel, upgrade pip to use wheel-cache
   - python -m pip install -U pip
   - python -m easy_install -U setuptools
+  - python -m pip install pygame
 
   # Download-progress bars break Travis's log view. Disable them by piping output
   # through another program (if output is not a tty, no progress bars)
