@@ -12,7 +12,8 @@ matrix:
     rvm: 2.3
 
 before_install:
-  - brew upgrade ruby
+#  - brew upgrade ruby
+  - brew update
   - which python
   - python --version
 
