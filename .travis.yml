@@ -21,12 +21,12 @@ install:
   # Install wheel, upgrade pip to use wheel-cache
   - python -m pip install -U pip
   - python -m easy_install -U setuptools
-  - python -m pip install pygame
+  #- python -m pip install pygame
 
   - python -m pip install -r requirements.txt | cat
 
   - python -m pip install git+http://github.com/pyinstaller/pyinstaller
-  - python setup.py all
+  #- python setup.py all
 
 script:
   #- if [ "${TRAVIS_TAG}x" = "x" ]; then return 0; fi
